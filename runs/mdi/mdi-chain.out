@@ -1,0 +1,96 @@
+	DISCOVER Molecular Simulation Program
+
+		Version:   2009.1
+		Build:     Feb 18 2010
+		Date:      Fri Apr 29 21:35:07 2011
+		User Name: jjo241
+		Host Name: tb10
+		Host Type: Linux
+		Threads:   1
+
+
+---------------------------------------------------------------
+Checked out license feature: MS_forciteplus <v2009.09> [for 1108:211755:4:NORTHWESTERN UNIVERSITY] (1 copy)
+---------------------------------------------------------------
+
+randomSeed is set to 130907
+
+Line   7:BTCL> autoEcho off 
+
+---------------------------------------------------------------
+Checked out license feature: MS_compass_MP <v2009.09> [for 1108:211755:4:NORTHWESTERN UNIVERSITY] (1 copy)
+---------------------------------------------------------------
+
+INPUT FILES
+___________
+
+File Type		Name
+---------		----
+
+Forcefield		/opt/materials_studio/5.0/etc/Gateway/../../share/Discover/res/compass.frc
+Molecular data		mdi-chain.mdf
+Coordinate		mdi-chain.car
+
+
+MOLECULAR TOPOLOGY
+__________________
+
+Number of molecules:		     1
+Number of residues:		   225
+Number of atoms:		  3420
+Number of atom types:		    13
+Number of bonds:		  3464
+Number of consolidated angles:	  6431
+Number of consolidated torsions:  8662
+Number of bond_bond_1_3s:	  8662
+Number of angle-angles:		 11331
+Number of out-of-planes:	   360
+
+FORCEFIELD OPTIONS
+__________________
+
+Filename		  : compass.frc
+Definition name		  : cff91
+Version			  : 2.8
+Last modification date	  : 3/6/2007
+# of automatic parameters : 0
+
+NONBOND ENERGY CUTOFFS
+______________________
+
+		Cutoff (A)	Spline Width (A)	Buffer Width (A)
+
+vdW		  9.50		     0.00		     0.50
+Coulomb		  9.50		     0.00		     0.50
+
+Summation method for vdW	: Atom based
+Summation method for Coulomb	: Atom based
+Dielectric			: 1.00
+
+Energy components             kcal/mol
+Total:                     6194.424701
+  Internal:                7668.754075
+    Bond:                  3823.944516
+    Angle:                 5322.280918
+    Torsion:               -713.177638
+    OutOfPlane:             179.167048
+    Cross:                 -943.460767
+      BondBond:              23.587385
+      BondAngle:           -216.523550
+      EndBondTorsion:       -27.968981
+      MiddleBondTorsion:    -76.569696
+      AngleTorsion:        -222.291661
+      AngleAngleTorsion:   -422.280776
+      BondBond-1-3:           4.244873
+      AngleAngle:            -5.658362
+  Nonbond:                -1474.329374
+    Vdw:                    712.508984
+      Repulsive:           4240.361627
+      Dispersive:         -3527.852642
+    Electrostatic:        -2186.838358
+    Hydrogenbond:             0.000000
+
+Total time used by DISCOVER: 0.10 secs
+
+Completion date: Fri Apr 29 21:35:07 2011
+Exiting Discover: status OK.
