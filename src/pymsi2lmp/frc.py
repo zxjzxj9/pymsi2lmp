@@ -8,6 +8,8 @@
           are hashable and can be stored in a dictionary for fast searching.          
 """
 
+import re
+
 # Abbreviations for each of the types of interactions in the COMPASS potential.
 # Each interaction is of class: NONBOND, BOND, ANGLE, TORSION, or OOP.
 compass_key = { 'b':    ['#quartic_bond',          'BOND'],
@@ -91,8 +93,13 @@ def sort_aa(types, indices=None):
     if indices: return types, indices
     return types
     
-def next_section(s): return s.startswith('#') and s.endswith('compass\n')
-def skip(s): return s=='\n' or s[0]=='!' or s[0]=='@' or s[0]=='>'
+# Returns true if the line is a section tag.
+def next_section(s): 
+    return re.match('^#\S+\s+compass\s*$', s) != None
+
+# Returns true for comment or blank lines.
+def skip(s): 
+    return s.strip()=='' or s[0]=='!' or s[0]=='@' or s[0]=='>'
 
 # Reads an frc file and supplies the parameters needed for a lammps input.
 class Frc:
@@ -107,7 +114,7 @@ class Frc:
   
     # Finds forcefield coefficients from the interaction type and 
     # forcefield types of a set of atoms.
-    def get_param(self, fftypes, interaction):                        
+    def get_param(self, fftypes, interaction):
         ffstr = ':'.join(fftypes)
         coeff = self.coeff[interaction]                                
         if ffstr in coeff:
@@ -120,17 +127,22 @@ class Frc:
         elif compass_key[interaction][1]=='ANGLE':   style = 3
         elif compass_key[interaction][1]=='TORSION': style = 4
         elif compass_key[interaction][1]=='OOP':     style = 5
-        
-        
-        eqffstr = ':'.join(sortf([self.equiv[a][style-1] for a in fftypes]))
+
+        equiv_fftypes = [] 
+        for a in fftypes:
+            if a in self.equiv:
+                equiv_fftypes.append(self.equiv[a][style-1])
+            else:
+                equiv_fftypes.append(a)
+        eqffstr = ':'.join(sortf(equiv_fftypes))
 
         # Optional: if you want to see which equivalences are being used.
         # This can end up producing a lot of output.
         #print 'Replacing', ffstr, 'with', eqffstr, 'for', interaction        
         if eqffstr in coeff: return coeff[eqffstr]
         
+        # Ok - now we are desperate - try wildcards.
         if compass_key[interaction][1]=='TORSION':
-            # Ok - now we are desperate - try wildcards.
             ffstr = ':'.join(sortf(fftypes[:-1]+['*']))        
             if ffstr in coeff: return coeff[ffstr]
             ffstr = ':'.join(sortf(['*']+fftypes[1::]))

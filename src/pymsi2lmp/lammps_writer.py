@@ -7,6 +7,7 @@
 """
 
 import frc2lmp
+import sys
 
 # Template string for the system bounds specified to LAMMPS.
 lmp_bounds = """
@@ -39,6 +40,11 @@ def write_data(system, frc):
     
     fid.write('\nMasses\n\n')
     for i,t in enumerate(types):
+        if not t in frc.types:
+            print 'Atom type', t, 'not found, enter it into the frc file.'
+            sys.exit(1)
+            
+        atom_type = frc.types[t][1]
         fid.write('%4d %10.6f\n' %(i+1, frc.types[t][1]))
 
     fid.write('\nPair Coeffs\n\n')       

@@ -20,7 +20,7 @@ def main(args):
     import glob
     # Finds the first *.mdf file in the directory and uses that as the basename.
     base    = glob.glob('*.mdf')[0][0:-4]
-    frcfile = '../../data/compass.frc'
+    frcfile = 'compass.frc'
     # If a base name is specified then override the automatically found one.
     if len(args) > 1: base     = args[1]
     if len(args) > 2: frcfile  = args[2]
@@ -29,8 +29,10 @@ def main(args):
         return
 
     # Calls msi2lmp and returns the output as strings.
-    run_lmp.missing, param_count = call_msi2lmp(base, frcfile)
-    run_lmp.base    = base    
+    run.missing, param_count = call_msi2lmp(base, frcfile)
+    run.base    = base    
+    run.frcfile = frcfile
+    run.newfrc  = 'compass-new.frc'
     # Initialize unknown parameters
     v = zeros((param_count))
     print 'Attempting to fit',param_count,'parameters.'        
@@ -68,20 +70,19 @@ def main(args):
                  
 # Returns the difference between the MS and LAMMPS energies.
 def residual(v):
-    energy = run_lmp(v, residual.x)
+    energy = run(v, residual.x)
     print norm(energy - residual.e) / norm(residual.e) 
     return energy - residual.e
-
     
 # Returns the LAMMPS energies for a set of trajectories.
-def run_lmp(v, x):
+def run(v, x):
     energy = zeros((len(x)))
     # Makes a new frc file in the current directory with the new parameters.
-    modify_frc.update('../../data/compass.frc', 'compass1.frc', run_lmp.missing, v)
-    call_msi2lmp(run_lmp.base, 'compass1.frc')
+    modify_frc.update(run.frcfile, run.newfrc, run.missing, v)
+    call_msi2lmp(run.base, run.newfrc)
     for i, xi in enumerate(x):
-        lammps.modify_data_file(run_lmp.base, xi, i) 
-        lmpout    = lammps.run(run_lmp.base, i, '/opt/lammps/lmp_openmpi')
+        lammps.modify_data_file(run.base, xi, i) 
+        lmpout    = lammps.run(run.base, i, '/opt/lammps/lmp_openmpi')
         energy[i] = lammps.extract_energy(lmpout)
     return array(energy)
 

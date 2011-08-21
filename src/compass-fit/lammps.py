@@ -14,7 +14,8 @@ pair_style          lj/class2/coul/cut 9.5 9.5
 pair_modify         shift no 
 special_bonds       lj/coul 0.0 0.0 1.0 angle yes dihedral yes
 read_data           %s
-neighbor            0.3 bin
+#neighbor            0.3 bin
+neighbor            0.3 nsq
 thermo_style        custom pe evdwl ecoul ebond eangle edihed eimp
 fix                 1 all nvt temp 300 300 1
 timestep            0
